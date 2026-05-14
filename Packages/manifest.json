@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.cesium.unity": "file:C:/Users/mapaz/Downloads/com.cesium.unity-1.19.0/package",
     "com.google.ar.core.arfoundation.extensions": "file:C:/Users/mapaz/Downloads/arcore-unity-extensions-1.54.0-arf6/package",
     "com.unity.ai.navigation": "2.0.12",
     "com.unity.collab-proxy": "2.12.4",
