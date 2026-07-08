@@ -54,3 +54,7 @@ Assets/package/*.tgz
 Assets/packages/*.tgz
 Assets/Package/*.tgz
 Assets/Packages/*.tgz
+
+# Unity recovery files
+Assets/_Recovery/
+Assets/**/_Recovery/
