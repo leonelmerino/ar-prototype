@@ -1,4 +1,4 @@
-## Prototipo AR Geoespacial con Google Geospatial Creator
+# Prototipo AR Geoespacial con Google Geospatial Creator
 
 Este proyecto corresponde a un prototipo de realidad aumentada geoespacial desarrollado en Unity.
 
@@ -10,15 +10,17 @@ El objetivo del prototipo es evaluar la factibilidad técnica de asociar conteni
 
 ## 1. Tecnologías utilizadas
 
-| Herramienta / paquete | Versión |
+| Herramienta / paquete | Versión utilizada |
 |---|---|
 | Unity | 6000.3.13f1 |
 | AR Foundation | 6.3.5 |
 | ARCore XR Plugin | 6.3.5 |
 | ARCore Extensions | 1.54.0 |
-| Geospatial Creator | Incluido en el flujo de ARCore Geospatial |
+| Geospatial Creator | Incluido en ARCore Extensions |
 | Google Map Tiles API | Servicio de Google Cloud |
-| Cesium for Unity | 1.23.2 |
+| Cesium for Unity | 1.19.0 |
+
+> Nota: desde ahora se utiliza Cesium for Unity `1.19.0` en vez de `1.23.2`.por compatibilidad con ARCore Extensions `1.54.0` al momento de hacer la copia del repositorio y Google Geospatial Creator en Unity `6000.3.13f1`.
 
 ---
 
@@ -35,7 +37,7 @@ Antes de abrir el proyecto, se recomienda tener instalado:
 - Dispositivo Android compatible con ARCore.
 - Cuenta de Google Cloud.
 - API Key configurada para los servicios necesarios.
-- Conexión a internet para las pruebas geoespaciales.
+- Conexión a internet para descargar paquetes y usar servicios geoespaciales.
 
 Opcionalmente, para una futura versión iOS:
 
@@ -90,180 +92,241 @@ Quickstart oficial:
 
 ---
 
-## 4. Abrir el proyecto
+## 4. Abrir el proyecto por primera vez
 
-1. Clonar el repositorio:
+### 4.1 Clonar el repositorio
 
-    ```bash
-    git clone <REPO_URL>
-    ```
+Clonar el repositorio:
 
-2. Abrir Unity Hub.
+```bash
+git clone <REPO_URL>
+```
 
-3. Seleccionar:
+Entrar a la carpeta del proyecto:
 
-    ```text
-    Add → Add project from disk
-    ```
+```bash
+cd <NOMBRE_DEL_PROYECTO>
+```
 
-4. Elegir la carpeta raíz del proyecto.
+La estructura general debe ser similar a:
 
-5. Abrir el proyecto con:
+```text
+Proyecto/
+├─ Assets/
+├─ Packages/
+├─ ProjectSettings/
+├─ README.md
+└─ .gitignore
+```
 
-    ```text
-    Unity 6000.3.13f1
-    ```
+---
 
-6. Esperar a que Unity importe los paquetes.
+### 4.2 Abrir con Unity Hub
+
+1. Abrir Unity Hub.
+2. Seleccionar:
+
+```text
+Add → Add project from disk
+```
+
+3. Elegir la carpeta raíz del proyecto.
+4. Abrir el proyecto con:
+
+```text
+Unity 6000.3.13f1
+```
+
+5. Esperar a que Unity importe paquetes y compile scripts.
 
 La primera apertura puede tardar varios minutos.
 
 ---
 
-## 5. Estructura general del proyecto
+## 5. Configuración de paquetes
 
-La estructura puede variar, pero los elementos principales deberían estar organizados de forma similar a esta:
-
-```text
-Assets/
-├─ Scenes/
-│  └─ prototipovps.unity
-├─ Prefabs/
-│  ├─ GeospatialAnchorContent.prefab
-│  ├─ VideoScreen.prefab
-│  └─ DebugUI.prefab
-├─ Materials/
-├─ RenderTextures/
-├─ Videos/
-├─ Scripts/
-├─ Config/
-│  └─ Secrets.example.json
-Packages/
-ProjectSettings/
-```
-
-Elementos relevantes:
-
-| Elemento | Función |
-|---|---|
-| `MainGeospatialAR.unity` | Escena principal del prototipo |
-| `AR Session` | Controla la sesión de realidad aumentada |
-| `XR Origin` / `AR Origin` | Referencia principal de cámara y tracking |
-| `ARCore Extensions` | Habilita funciones geoespaciales de ARCore |
-| `Geospatial Creator` | Permite configurar y previsualizar puntos geográficos |
-| `Cesium Georeference` | Apoya la representación geoespacial dentro de Unity |
-| `VideoScreen` | Superficie virtual donde se reproduce contenido audiovisual |
-| `DebugUI` | Interfaz temporal para mostrar distancia, precisión, orientación y altura |
-
----
-
-## 6. Instalación de paquetes
-
-### 6.1 AR Foundation
-
-En Unity:
+El proyecto usa paquetes de Unity, Google y Cesium.  
+Las versiones esperadas son:
 
 ```text
-Window → Package Manager
-```
-
-Buscar e instalar:
-
-```text
-AR Foundation
-```
-
-Versión usada:
-
-```text
-6.3.5
+AR Foundation: 6.3.5
+ARCore XR Plugin: 6.3.5
+ARCore Extensions: 1.54.0
+Cesium for Unity: 1.19.0
 ```
 
 ---
 
-### 6.2 ARCore XR Plugin
+## 6. Cesium for Unity
 
-En Unity:
+### 6.1 Configuración esperada
 
-```text
-Window → Package Manager
+Este proyecto utiliza Cesium for Unity `1.19.0`.
+
+En `Packages/manifest.json` debe existir el Scoped Registry de Cesium:
+
+```json
+"scopedRegistries": [
+  {
+    "name": "Cesium",
+    "url": "https://unity.pkg.cesium.com/",
+    "scopes": [
+      "com.cesium.unity"
+    ]
+  }
+]
 ```
 
-Buscar e instalar:
+Y dentro de `dependencies` debe estar:
 
-```text
-ARCore XR Plugin
+```json
+"com.cesium.unity": "1.19.0"
 ```
 
-Versión usada:
+Ejemplo parcial de `manifest.json`:
+
+```json
+{
+  "scopedRegistries": [
+    {
+      "name": "Cesium",
+      "url": "https://unity.pkg.cesium.com/",
+      "scopes": [
+        "com.cesium.unity"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.cesium.unity": "1.19.0",
+    "com.google.ar.core.arfoundation.extensions": "1.54.0",
+    "com.unity.xr.arfoundation": "6.3.5",
+    "com.unity.xr.arcore": "6.3.5"
+  }
+}
+```
+
+> No reemplazar todo el archivo `manifest.json` por este ejemplo, ya que el proyecto puede tener más dependencias. Solo verificar que las líneas de Cesium estén presentes y correctamente escritas.
+
+---
+
+### 6.2 Si Unity no encuentra Cesium
+
+Si al abrir el proyecto aparece un error similar a:
 
 ```text
-6.3.5
+Project has invalid dependencies:
+com.cesium.unity@1.19.0 cannot be found
+```
+
+revisar:
+
+1. Que exista el Scoped Registry de Cesium en `Packages/manifest.json`.
+2. Que la URL sea:
+
+```text
+https://unity.pkg.cesium.com/
+```
+
+3. Que la dependencia sea:
+
+```json
+"com.cesium.unity": "1.19.0"
+```
+
+4. Que el computador tenga conexión a internet.
+5. Que no exista una referencia antigua a un archivo `.tgz`.
+
+No debe aparecer algo como:
+
+```json
+"com.cesium.unity": "file:../Assets/package/com.cesium.unity-1.23.2.tgz"
+```
+
+ni:
+
+```json
+"com.cesium.unity": "file:../LocalPackages/com.cesium.unity-1.23.2.tgz"
 ```
 
 ---
 
-### 6.3 ARCore Extensions
+### 6.3 Si el error aparece en `packages-lock.json`
 
-ARCore Extensions puede revisarse desde el repositorio oficial:
+No borrar completo `Packages/packages-lock.json`.
 
-[google-ar/arcore-unity-extensions](https://github.com/google-ar/arcore-unity-extensions)
+Si existe un error relacionado con Cesium, corregir solo el bloque de `com.cesium.unity` o permitir que Unity lo regenere tras corregir `manifest.json`.
 
-Versión usada:
+El bloque correcto debería verse similar a:
 
-```text
-1.54.0
+```json
+"com.cesium.unity": {
+  "version": "1.19.0",
+  "depth": 0,
+  "source": "registry",
+  "dependencies": {},
+  "url": "https://unity.pkg.cesium.com/"
+}
 ```
 
-Si el paquete no está instalado, revisar la sección de releases del repositorio oficial:
+No debe decir:
 
-[ARCore Extensions releases](https://github.com/google-ar/arcore-unity-extensions/releases)
+```text
+source: local-tarball
+file:
+Assets/package
+.tgz
+```
 
 ---
 
-### 6.4 Cesium for Unity
+## 7. ARCore Extensions y Geospatial Creator
 
-Cesium for Unity se utiliza para apoyar la representación geoespacial y la visualización del entorno 3D dentro de Unity.
+### 7.1 Configuración esperada
 
-Repositorio oficial:
-
-[CesiumGS/cesium-unity](https://github.com/CesiumGS/cesium-unity)
-
-Guía oficial de instalación:
-
-[Cesium for Unity Quickstart](https://cesium.com/learn/unity/unity-quickstart/)
-
-Versión usada:
+El proyecto utiliza:
 
 ```text
-1.23.2
+ARCore Extensions: 1.54.0
 ```
 
-Para agregarlo en Unity:
-
-```text
-Window → Package Manager
-```
-
-Luego seguir la guía oficial de Cesium for Unity para instalar el paquete correspondiente.
-
-Una vez instalado, se puede agregar un objeto de referencia geoespacial desde las herramientas de Cesium en Unity. Por ejemplo:
-
-```text
-Cesium → Cesium Georeference
-```
-
-También puede agregarse desde la jerarquía de la escena si el paquete ya está disponible.
+ARCore Extensions permite habilitar funcionalidades geoespaciales y el flujo de Geospatial Creator dentro de Unity.
 
 ---
 
-## 7. Configuración de Google Cloud
+### 7.2 Error relacionado con `CesiumForUnity`
 
-Para que el prototipo funcione, se requiere una API Key de Google Cloud.
+Si aparece un error similar a:
 
-### 7.1 Servicios necesarios
+```text
+GeospatialCreatorCesiumAdapter.cs(...): error CS0246:
+The type or namespace name 'CesiumForUnity' could not be found
+```
 
-En Google Cloud Console, activar los servicios requeridos:
+revisar que Cesium esté instalado como:
+
+```text
+Cesium for Unity 1.19.0
+```
+
+Este proyecto utiliza esa versión por compatibilidad con ARCore Extensions y Geospatial Creator.
+
+No editar archivos dentro de:
+
+```text
+Library/PackageCache/
+```
+
+porque Unity los regenera automáticamente.
+
+---
+
+## 8. Configuración de Google Cloud
+
+Para usar la funcionalidad geoespacial y visualizar tiles 3D, se requiere una API Key de Google Cloud.
+
+### 8.1 Servicios necesarios
+
+En Google Cloud Console, activar:
 
 ```text
 ARCore API
@@ -276,7 +339,7 @@ Google Cloud Console:
 
 ---
 
-### 7.2 Crear API Key
+### 8.2 Crear API Key
 
 En Google Cloud Console:
 
@@ -288,7 +351,7 @@ Copiar la clave y guardarla localmente.
 
 ---
 
-### 7.3 Restringir API Key
+### 8.3 Restringir API Key
 
 No se recomienda dejar la API Key sin restricciones.
 
@@ -305,13 +368,6 @@ Package name: com.tuempresa.tuapp
 SHA-1 certificate fingerprint: [COMPLETAR]
 ```
 
-Para una futura versión iOS:
-
-```text
-Application restrictions → iOS apps
-Bundle ID: com.tuempresa.tuapp
-```
-
 En API restrictions, limitar la clave solo a las APIs necesarias:
 
 ```text
@@ -319,18 +375,28 @@ ARCore API
 Map Tiles API
 ```
 
+Para una futura versión iOS:
+
+```text
+Application restrictions → iOS apps
+Bundle ID: com.tuempresa.tuapp
+```
+
 ---
 
-## 8. Manejo seguro de API Keys
+## 9. Manejo seguro de API Keys
 
-No subir API Keys reales al repositorio.
+Las API Keys reales no deben subirse al repositorio.
 
-### 8.1 Archivos que no deben subirse
+---
+
+### 9.1 Archivos que no deben subirse
 
 No subir:
 
 ```text
 .env
+.env.*
 local_keys.json
 archivos con API Keys reales
 certificados
@@ -341,49 +407,104 @@ client secrets
 
 ---
 
-### 8.2 Archivo de ejemplo
+### 9.2 Carpeta local para claves
 
-El repositorio puede incluir un archivo de ejemplo:
+Se recomienda crear una carpeta local ignorada por Git:
 
 ```text
-Assets/Config/Secrets.example.json
+LocalSecrets/
+```
+
+Ejemplo:
+
+```text
+Proyecto/
+├─ Assets/
+├─ Packages/
+├─ ProjectSettings/
+├─ LocalSecrets/
+│  └─ google_api_keys.json
+```
+
+Contenido sugerido de `LocalSecrets/google_api_keys.json`:
+
+```json
+{
+  "IPRE_GOOGLE_MAP_TILES_API_KEY": "TU_API_KEY_LOCAL",
+  "IPRE_GOOGLE_GEOSPATIAL_API_KEY": "TU_API_KEY_LOCAL"
+}
+```
+
+Esta carpeta debe estar ignorada por Git.
+
+---
+
+### 9.3 Archivo de ejemplo para el repositorio
+
+El repositorio puede incluir un archivo de ejemplo sin claves reales:
+
+```text
+LocalSecrets.example.json
 ```
 
 Contenido sugerido:
 
 ```json
 {
-  "googleMapTilesApiKey": "REEMPLAZAR_LOCALMENTE",
-  "googleGeospatialApiKey": "REEMPLAZAR_LOCALMENTE"
+  "IPRE_GOOGLE_MAP_TILES_API_KEY": "REEMPLAZAR_LOCALMENTE",
+  "IPRE_GOOGLE_GEOSPATIAL_API_KEY": "REEMPLAZAR_LOCALMENTE"
 }
 ```
 
 ---
 
-### 8.3 Archivo local no versionado
+### 9.4 Configuración manual de la key en Cesium
 
-Cada persona que ejecute el proyecto puede crear localmente:
+Si se configura manualmente la URL del tileset, el formato es:
 
 ```text
-Assets/Config/Secrets/local_keys.json
+https://tile.googleapis.com/v1/3dtiles/root.json?key=TU_API_KEY_LOCAL
 ```
 
-Contenido local:
+Antes de hacer commit, no debe quedar una key real dentro de escenas, prefabs o assets.
 
-```json
-{
-  "googleMapTilesApiKey": "TU_API_KEY_LOCAL",
-  "googleGeospatialApiKey": "TU_API_KEY_LOCAL"
-}
+Reemplazar por:
+
+```text
+https://tile.googleapis.com/v1/3dtiles/root.json?key=REEMPLAZAR_CON_API_KEY_LOCAL
 ```
 
-Este archivo no debe subirse al repositorio.
+o dejar el campo vacío.
 
 ---
 
-### 8.4 `.gitignore` recomendado
+### 9.5 Búsqueda de claves antes del commit
 
-En la raíz del proyecto debe existir un archivo `.gitignore` con al menos:
+Antes de subir cambios, buscar claves en el proyecto.
+
+En PowerShell:
+
+```powershell
+Get-ChildItem -Recurse -File -Include *.unity,*.prefab,*.asset,*.json,*.cs,*.txt | Select-String -Pattern "AIza"
+```
+
+También revisar patrones como:
+
+```text
+API_KEY
+apiKey
+token
+secret
+client_secret
+```
+
+---
+
+## 10. `.gitignore` recomendado
+
+En la raíz del proyecto debe existir un archivo `.gitignore`.
+
+Contenido recomendado:
 
 ```gitignore
 # Unity
@@ -396,21 +517,35 @@ En la raíz del proyecto debe existir un archivo `.gitignore` con al menos:
 [Uu]ser[Ss]ettings/
 MemoryCaptures/
 
+# Unity recovery files
+Assets/_Recovery/
+Assets/**/_Recovery/
+
 # IDE
 .vscode/
 .idea/
 *.csproj
 *.sln
 *.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Secrets / API Keys
+# Local API Keys
+LocalSecrets/
 .env
 .env.*
 !.env.example
+*.local.json
+
+# Secrets / credentials
 secrets/
 Secrets/
 Assets/Secrets/
@@ -422,24 +557,58 @@ Assets/**/Secrets/
 *.pem
 *.key
 *.mobileprovision
-```
 
-Antes de hacer commit, revisar que no aparezcan claves con patrones como:
-
-```text
-AIza
-API_KEY
-apiKey
-token
-secret
-client_secret
+# Large local Unity packages
+Assets/package/*.tgz
+Assets/packages/*.tgz
+Assets/Package/*.tgz
+Assets/Packages/*.tgz
+LocalPackages/
+*.tgz
 ```
 
 ---
 
-## 9. Configuración en Unity
+## 11. Estructura general del proyecto
 
-### 9.1 Activar XR Plug-in Management
+La estructura puede variar, pero los elementos principales deberían estar organizados de forma similar a esta:
+
+```text
+Assets/
+├─ Scenes/
+│  └─ MainGeospatialAR.unity
+├─ Prefabs/
+│  ├─ GeospatialAnchorContent.prefab
+│  ├─ VideoScreen.prefab
+│  └─ DebugUI.prefab
+├─ Materials/
+├─ RenderTextures/
+├─ Videos/
+├─ Scripts/
+├─ Config/
+Packages/
+ProjectSettings/
+```
+
+Elementos relevantes:
+
+| Elemento | Función |
+|---|---|
+| `MainGeospatialAR.unity` | Escena principal del prototipo |
+| `AR Session` | Controla la sesión de realidad aumentada |
+| `XR Origin` / `AR Origin` | Referencia principal de cámara y tracking |
+| `ARCore Extensions` | Habilita funciones geoespaciales de ARCore |
+| `Geospatial Creator` | Permite configurar y previsualizar puntos geográficos |
+| `Cesium Georeference` | Apoya la representación geoespacial dentro de Unity |
+| `Cesium 3D Tileset` | Carga tiles 3D desde una URL |
+| `VideoScreen` | Superficie virtual donde se reproduce contenido audiovisual |
+| `DebugUI` | Interfaz temporal para mostrar distancia, precisión, orientación y altura |
+
+---
+
+## 12. Configuración en Unity
+
+### 12.1 Activar XR Plug-in Management
 
 En Unity:
 
@@ -461,7 +630,7 @@ Activar ARKit
 
 ---
 
-### 9.2 Configurar ARCore Extensions
+### 12.2 Configurar ARCore Extensions
 
 En la escena principal debe existir una configuración asociada a ARCore Extensions.
 
@@ -478,7 +647,7 @@ En la configuración de ARCore Extensions, habilitar las opciones geoespaciales 
 
 ---
 
-### 9.3 Activar Geospatial Creator
+### 12.3 Activar Geospatial Creator
 
 Geospatial Creator permite configurar y previsualizar ubicaciones reales dentro del flujo de ARCore Geospatial.
 
@@ -490,7 +659,7 @@ Desde Geospatial Creator se pueden configurar ubicaciones reales, previsualizar 
 
 ---
 
-## 10. Configuración de anclajes geoespaciales
+## 13. Configuración de anclajes geoespaciales
 
 Los contenidos se posicionan mediante coordenadas reales.
 
@@ -522,13 +691,13 @@ Contenido: esfera azul / video / modelo 3D
 
 ---
 
-## 11. Cómo agregar un nuevo punto geoespacial
+## 14. Cómo agregar un nuevo punto geoespacial
 
 1. Abrir la escena principal:
 
-    ```text
-    Assets/Scenes/MainGeospatialAR.unity
-    ```
+```text
+Assets/Scenes/MainGeospatialAR.unity
+```
 
 2. Abrir la herramienta de Geospatial Creator.
 
@@ -536,21 +705,21 @@ Contenido: esfera azul / video / modelo 3D
 
 4. Ingresar:
 
-    ```text
-    Latitude
-    Longitude
-    Altitude
-    ```
+```text
+Latitude
+Longitude
+Altitude
+```
 
 5. Asociar un prefab o GameObject como contenido.
 
 6. Ajustar:
 
-    ```text
-    Position local
-    Rotation
-    Scale
-    ```
+```text
+Position local
+Rotation
+Scale
+```
 
 7. Guardar la escena.
 
@@ -558,7 +727,7 @@ Contenido: esfera azul / video / modelo 3D
 
 ---
 
-## 12. Contenido 3D georreferenciado
+## 15. Contenido 3D georreferenciado
 
 El contenido 3D puede estar compuesto por:
 
@@ -581,11 +750,13 @@ Recomendaciones:
 
 ---
 
-## 13. Contenido audiovisual georreferenciado
+## 16. Contenido audiovisual georreferenciado
 
 El prototipo permite reproducir video asociado a un punto geográfico.
 
-### 13.1 Implementación
+---
+
+### 16.1 Implementación
 
 El sistema usa:
 
@@ -640,7 +811,7 @@ Loop: opcional
 
 ---
 
-### 13.2 Formato recomendado del video
+### 16.2 Formato recomendado del video
 
 Formatos:
 
@@ -660,7 +831,7 @@ Relación de aspecto: 16:9
 
 ---
 
-### 13.3 Escala correcta del video
+### 16.3 Escala correcta del video
 
 Para evitar deformación:
 
@@ -688,7 +859,7 @@ La escala debe ajustarse según la distancia esperada de observación.
 
 ---
 
-### 13.4 Problemas comunes con video
+### 16.4 Problemas comunes con video
 
 #### Pantalla negra
 
@@ -732,9 +903,9 @@ Anchor detectado pero contenido local desplazado
 
 ---
 
-## 14. Ejecutar en Android
+## 17. Ejecutar en Android
 
-### 14.1 Preparar teléfono
+### 17.1 Preparar teléfono
 
 En el dispositivo Android:
 
@@ -754,7 +925,7 @@ Verificar que el dispositivo sea compatible con ARCore.
 
 ---
 
-### 14.2 Configurar Unity
+### 17.2 Configurar Unity
 
 En Unity:
 
@@ -788,7 +959,7 @@ ARCore
 
 ---
 
-### 14.3 Player Settings
+### 17.3 Player Settings
 
 En:
 
@@ -816,7 +987,7 @@ Internet
 
 ---
 
-### 14.4 Build and Run
+### 17.4 Build and Run
 
 Conectar el teléfono por USB.
 
@@ -835,7 +1006,7 @@ Ubicación
 
 ---
 
-## 15. Pruebas en terreno
+## 18. Pruebas en terreno
 
 Durante las pruebas, registrar:
 
@@ -869,7 +1040,7 @@ Observación: [COMPLETAR]
 
 ---
 
-## 16. Debug
+## 19. Debug
 
 El prototipo puede incluir una interfaz temporal de debug para mostrar:
 
@@ -889,9 +1060,9 @@ Esta información es útil durante el desarrollo, pero no debería mostrarse en 
 
 ---
 
-## 17. Problemas comunes del prototipo geoespacial
+## 20. Problemas comunes del prototipo geoespacial
 
-### 17.1 El contenido aparece lejos
+### 20.1 El contenido aparece lejos
 
 Revisar:
 
@@ -906,7 +1077,7 @@ Jerarquía dentro del anchor
 
 ---
 
-### 17.2 El anchor se detecta, pero el objeto no aparece
+### 20.2 El anchor se detecta, pero el objeto no aparece
 
 Revisar:
 
@@ -921,7 +1092,7 @@ Altitud incorrecta
 
 ---
 
-### 17.3 La distancia se actualiza, pero no se ve el contenido
+### 20.3 La distancia se actualiza, pero no se ve el contenido
 
 Esto puede indicar que la localización funciona, pero el contenido está mal configurado dentro de Unity.
 
@@ -937,7 +1108,7 @@ Canvas o Quad orientado en sentido contrario
 
 ---
 
-### 17.4 La app no localiza bien
+### 20.4 La app no localiza bien
 
 Revisar:
 
@@ -953,7 +1124,7 @@ Movimiento inicial del dispositivo
 
 ---
 
-### 17.5 El video aparece negro
+### 20.5 El video aparece negro
 
 Revisar:
 
@@ -968,7 +1139,29 @@ Compatibilidad del codec
 
 ---
 
-## 18. Proyección a iOS
+### 20.6 Error de Package Manager
+
+Si Unity muestra:
+
+```text
+Project has invalid dependencies
+```
+
+revisar:
+
+```text
+Packages/manifest.json
+Packages/packages-lock.json
+Conexión a internet
+Scoped Registry de Cesium
+Versión de Cesium
+```
+
+No borrar completo `packages-lock.json` si el proyecto ya tiene ARCore Extensions funcionando.
+
+---
+
+## 21. Proyección a iOS
 
 El prototipo fue trabajado principalmente para pruebas geoespaciales en Android mediante ARCore.
 
@@ -997,7 +1190,7 @@ Ejecutar en iPhone/iPad
 
 ---
 
-## 19. Buenas prácticas antes de subir al repositorio
+## 22. Buenas prácticas antes de subir al repositorio
 
 No subir:
 
@@ -1009,10 +1202,12 @@ Build/
 Builds/
 Logs/
 UserSettings/
+Assets/_Recovery/
 API Keys
 Tokens
 Keystores
 Certificados
+Archivos .tgz grandes
 ```
 
 Antes de hacer commit, revisar en GitHub Desktop que no aparezcan archivos con:
@@ -1030,7 +1225,7 @@ Si aparece una clave real, eliminarla antes del commit.
 
 ---
 
-## 20. Extensiones posibles
+## 23. Extensiones posibles
 
 Este prototipo puede ampliarse con:
 
@@ -1050,9 +1245,10 @@ evaluación con usuarios
 
 ---
 
-## 21. Notas importantes
+## 24. Notas importantes
 
 - Este proyecto corresponde a un prototipo geoespacial con Google Geospatial Creator.
+- El proyecto usa Cesium for Unity `1.19.0` por compatibilidad con ARCore Extensions `1.54.0`.
 - Las coordenadas deben revisarse cuidadosamente.
 - La altitud afecta la visibilidad del contenido.
 - La localización puede variar según el dispositivo, conectividad, entorno y disponibilidad de VPS.
