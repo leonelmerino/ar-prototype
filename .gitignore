@@ -4,12 +4,14 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
-UserSettings/
+[Uu]ser[Ss]ettings/
 MemoryCaptures/
 .DS_Store
+Thumbs.db
 
 # Visual Studio / Rider
 .vs/
+.vscode/
 .idea/
 *.csproj
 *.sln
@@ -30,3 +32,25 @@ Packages/packages-lock.json.meta
 *.aab
 *.xcworkspace
 *.xcuserdata
+
+#Secrets / API Keys
+.env
+.env.*
+!.env.example
+secrets/
+Secrets/
+Assets/Secrets/
+Assets/Config/Secrets/
+Assets/**/Secrets/
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+*.mobileprovision
+
+# Large local Unity packages
+Assets/package/*.tgz
+Assets/packages/*.tgz
+Assets/Package/*.tgz
+Assets/Packages/*.tgz

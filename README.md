@@ -1,388 +1,1063 @@
-# Prototipo AR con Detección de Imágenes (Guía Paso a Paso)
+## Prototipo AR Geoespacial con Google Geospatial Creator
 
-Este proyecto es un prototipo de realidad aumentada desarrollado en Unity.
-Permite detectar imágenes de referencia y posicionar contenido 3D y multimedia (video) sobre ellas, sin uso de servicios cloud.
+Este proyecto corresponde a un prototipo de realidad aumentada geoespacial desarrollado en Unity.
 
-Esta guía está pensada para estudiantes sin experiencia previa en Unity o desarrollo móvil.
+Permite posicionar objetos 3D y contenido audiovisual en ubicaciones reales mediante coordenadas geográficas, utilizando Google Geospatial Creator, AR Foundation, ARCore Extensions, Google Map Tiles API y Cesium for Unity.
 
----
-
-# 1. Requisitos
-
-Antes de comenzar, debes tener instalado:
-
-* Unity Hub
-* Unity versión **6000.3.x** (idealmente la misma del proyecto)
-* Módulos de Unity:
-
-  * iOS Build Support
-  * Android Build Support
-  * Android SDK + NDK + OpenJDK
-* Xcode (Mac)
-* Un iPhone (para pruebas iOS)
-* (Opcional) Un teléfono Android compatible con ARCore
+El objetivo del prototipo es evaluar la factibilidad técnica de asociar contenido digital a puntos físicos del entorno, como base para una futura experiencia situada de divulgación científica.
 
 ---
 
-# 2. Abrir el proyecto
+## 1. Tecnologías utilizadas
+
+| Herramienta / paquete | Versión |
+|---|---|
+| Unity | 6000.3.13f1 |
+| AR Foundation | 6.3.5 |
+| ARCore XR Plugin | 6.3.5 |
+| ARCore Extensions | 1.54.0 |
+| Geospatial Creator | Incluido en el flujo de ARCore Geospatial |
+| Google Map Tiles API | Servicio de Google Cloud |
+| Cesium for Unity | 1.23.2 |
+
+---
+
+## 2. Requisitos previos
+
+Antes de abrir el proyecto, se recomienda tener instalado:
+
+- Unity Hub.
+- Unity 6000.3.13f1.
+- Android Build Support.
+- Android SDK.
+- Android NDK.
+- OpenJDK.
+- Dispositivo Android compatible con ARCore.
+- Cuenta de Google Cloud.
+- API Key configurada para los servicios necesarios.
+- Conexión a internet para las pruebas geoespaciales.
+
+Opcionalmente, para una futura versión iOS:
+
+- Xcode.
+- Dispositivo iPhone o iPad compatible con ARKit.
+
+---
+
+## 3. Documentación y repositorios útiles
+
+### 3.1 Google Geospatial Creator
+
+Documentación oficial con guía paso a paso:
+
+[Google Geospatial Creator for Unity - Quickstart](https://developers.google.com/ar/geospatialcreator/unity/quickstart)
+
+Guía de desarrollo geoespacial para Unity + AR Foundation:
+
+[Geospatial developer guide for Unity](https://developers.google.com/ar/develop/unity-arf/geospatial/developer-guide)
+
+Documentación de anclajes geoespaciales:
+
+[Geospatial anchors](https://developers.google.com/ar/develop/geospatial/anchors)
+
+---
+
+### 3.2 ARCore Extensions
+
+Repositorio oficial:
+
+[google-ar/arcore-unity-extensions](https://github.com/google-ar/arcore-unity-extensions)
+
+Releases de ARCore Extensions:
+
+[ARCore Extensions releases](https://github.com/google-ar/arcore-unity-extensions/releases)
+
+---
+
+### 3.3 Cesium for Unity
+
+Repositorio oficial:
+
+[CesiumGS/cesium-unity](https://github.com/CesiumGS/cesium-unity)
+
+Repositorio de ejemplos:
+
+[CesiumGS/cesium-unity-samples](https://github.com/CesiumGS/cesium-unity-samples)
+
+Quickstart oficial:
+
+[Cesium for Unity Quickstart](https://cesium.com/learn/unity/unity-quickstart/)
+
+---
+
+## 4. Abrir el proyecto
 
 1. Clonar el repositorio:
-   git clone <REPO_URL>
 
-2. Abrir Unity Hub
+    ```bash
+    git clone <REPO_URL>
+    ```
 
-3. Click en:
-   "Add" → seleccionar la carpeta del proyecto
+2. Abrir Unity Hub.
 
-4. Abrir el proyecto con la versión correcta de Unity
+3. Seleccionar:
 
-5. Esperar a que Unity cargue todo (puede tardar la primera vez)
+    ```text
+    Add → Add project from disk
+    ```
 
----
+4. Elegir la carpeta raíz del proyecto.
 
-# 3. Estructura importante del proyecto
+5. Abrir el proyecto con:
 
-Los elementos clave que debes conocer son:
+    ```text
+    Unity 6000.3.13f1
+    ```
 
-* Escena principal:
-  Assets/Scenes/MainAR.unity
+6. Esperar a que Unity importe los paquetes.
 
-* Biblioteca de imágenes:
-  Assets/XR/ReferenceImages.asset
-
-* Prefab del contenido:
-  Assets/Prefabs/MarkerContent.prefab
-
----
-
-# 4. Cómo agregar una nueva imagen a detectar
-
-NO debes crear una nueva librería.
-
-Debes usar la existente:
-
-1. En el panel Project, navegar a:
-   Assets/XR/
-
-2. Seleccionar:
-   ReferenceImages
-
-3. En el Inspector:
-
-   * Click en "Add Image"
-   * Arrastrar tu imagen (PNG/JPG)
-
-4. Configurar:
-
-   * Name: nombre identificador
-   * Specify Size: ACTIVADO
-   * Size: tamaño real en metros (ej: 0.15)
-
-IMPORTANTE: el tamaño debe coincidir con el tamaño real de la imagen.
+La primera apertura puede tardar varios minutos.
 
 ---
 
-# 5. Cómo cambiar el contenido del marcador (3D y video)
+## 5. Estructura general del proyecto
 
-El contenido mostrado al detectar la imagen está definido en el prefab:
+La estructura puede variar, pero los elementos principales deberían estar organizados de forma similar a esta:
 
-Assets/Prefabs/MarkerContent
+```text
+Assets/
+├─ Scenes/
+│  └─ prototipovps.unity
+├─ Prefabs/
+│  ├─ GeospatialAnchorContent.prefab
+│  ├─ VideoScreen.prefab
+│  └─ DebugUI.prefab
+├─ Materials/
+├─ RenderTextures/
+├─ Videos/
+├─ Scripts/
+├─ Config/
+│  └─ Secrets.example.json
+Packages/
+ProjectSettings/
+```
 
-Este prefab puede contener:
+Elementos relevantes:
 
-* Objetos 3D (ej. cubo)
-* Elementos multimedia (video)
-
-## Para modificar el contenido:
-
-1. Ir a:
-   Assets/Prefabs/
-
-2. Abrir:
-   MarkerContent
-
-3. Modificar o agregar:
-
-   * modelos 3D
-   * objetos adicionales
-   * pantalla de video
-
-4. Asegurarse de que los objetos estén levemente elevados:
-
-   * Y ≈ 0.05 (para evitar que queden dentro del plano)
-
-5. Guardar el prefab
-
----
-
-# 6. Contenido multimedia: reproducción de video sobre el marcador
-
-El prototipo permite reproducir un video junto con el objeto 3D cuando se detecta la imagen.
+| Elemento | Función |
+|---|---|
+| `MainGeospatialAR.unity` | Escena principal del prototipo |
+| `AR Session` | Controla la sesión de realidad aumentada |
+| `XR Origin` / `AR Origin` | Referencia principal de cámara y tracking |
+| `ARCore Extensions` | Habilita funciones geoespaciales de ARCore |
+| `Geospatial Creator` | Permite configurar y previsualizar puntos geográficos |
+| `Cesium Georeference` | Apoya la representación geoespacial dentro de Unity |
+| `VideoScreen` | Superficie virtual donde se reproduce contenido audiovisual |
+| `DebugUI` | Interfaz temporal para mostrar distancia, precisión, orientación y altura |
 
 ---
 
-## 6.1 Cómo está implementado
+## 6. Instalación de paquetes
+
+### 6.1 AR Foundation
+
+En Unity:
+
+```text
+Window → Package Manager
+```
+
+Buscar e instalar:
+
+```text
+AR Foundation
+```
+
+Versión usada:
+
+```text
+6.3.5
+```
+
+---
+
+### 6.2 ARCore XR Plugin
+
+En Unity:
+
+```text
+Window → Package Manager
+```
+
+Buscar e instalar:
+
+```text
+ARCore XR Plugin
+```
+
+Versión usada:
+
+```text
+6.3.5
+```
+
+---
+
+### 6.3 ARCore Extensions
+
+ARCore Extensions puede revisarse desde el repositorio oficial:
+
+[google-ar/arcore-unity-extensions](https://github.com/google-ar/arcore-unity-extensions)
+
+Versión usada:
+
+```text
+1.54.0
+```
+
+Si el paquete no está instalado, revisar la sección de releases del repositorio oficial:
+
+[ARCore Extensions releases](https://github.com/google-ar/arcore-unity-extensions/releases)
+
+---
+
+### 6.4 Cesium for Unity
+
+Cesium for Unity se utiliza para apoyar la representación geoespacial y la visualización del entorno 3D dentro de Unity.
+
+Repositorio oficial:
+
+[CesiumGS/cesium-unity](https://github.com/CesiumGS/cesium-unity)
+
+Guía oficial de instalación:
+
+[Cesium for Unity Quickstart](https://cesium.com/learn/unity/unity-quickstart/)
+
+Versión usada:
+
+```text
+1.23.2
+```
+
+Para agregarlo en Unity:
+
+```text
+Window → Package Manager
+```
+
+Luego seguir la guía oficial de Cesium for Unity para instalar el paquete correspondiente.
+
+Una vez instalado, se puede agregar un objeto de referencia geoespacial desde las herramientas de Cesium en Unity. Por ejemplo:
+
+```text
+Cesium → Cesium Georeference
+```
+
+También puede agregarse desde la jerarquía de la escena si el paquete ya está disponible.
+
+---
+
+## 7. Configuración de Google Cloud
+
+Para que el prototipo funcione, se requiere una API Key de Google Cloud.
+
+### 7.1 Servicios necesarios
+
+En Google Cloud Console, activar los servicios requeridos:
+
+```text
+ARCore API
+Map Tiles API
+```
+
+Google Cloud Console:
+
+[Google Cloud Console](https://console.cloud.google.com/)
+
+---
+
+### 7.2 Crear API Key
+
+En Google Cloud Console:
+
+```text
+APIs & Services → Credentials → Create credentials → API key
+```
+
+Copiar la clave y guardarla localmente.
+
+---
+
+### 7.3 Restringir API Key
+
+No se recomienda dejar la API Key sin restricciones.
+
+Para Android:
+
+```text
+Application restrictions → Android apps
+```
+
+Agregar:
+
+```text
+Package name: com.tuempresa.tuapp
+SHA-1 certificate fingerprint: [COMPLETAR]
+```
+
+Para una futura versión iOS:
+
+```text
+Application restrictions → iOS apps
+Bundle ID: com.tuempresa.tuapp
+```
+
+En API restrictions, limitar la clave solo a las APIs necesarias:
+
+```text
+ARCore API
+Map Tiles API
+```
+
+---
+
+## 8. Manejo seguro de API Keys
+
+No subir API Keys reales al repositorio.
+
+### 8.1 Archivos que no deben subirse
+
+No subir:
+
+```text
+.env
+local_keys.json
+archivos con API Keys reales
+certificados
+keystores
+tokens
+client secrets
+```
+
+---
+
+### 8.2 Archivo de ejemplo
+
+El repositorio puede incluir un archivo de ejemplo:
+
+```text
+Assets/Config/Secrets.example.json
+```
+
+Contenido sugerido:
+
+```json
+{
+  "googleMapTilesApiKey": "REEMPLAZAR_LOCALMENTE",
+  "googleGeospatialApiKey": "REEMPLAZAR_LOCALMENTE"
+}
+```
+
+---
+
+### 8.3 Archivo local no versionado
+
+Cada persona que ejecute el proyecto puede crear localmente:
+
+```text
+Assets/Config/Secrets/local_keys.json
+```
+
+Contenido local:
+
+```json
+{
+  "googleMapTilesApiKey": "TU_API_KEY_LOCAL",
+  "googleGeospatialApiKey": "TU_API_KEY_LOCAL"
+}
+```
+
+Este archivo no debe subirse al repositorio.
+
+---
+
+### 8.4 `.gitignore` recomendado
+
+En la raíz del proyecto debe existir un archivo `.gitignore` con al menos:
+
+```gitignore
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+
+# IDE
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / API Keys
+.env
+.env.*
+!.env.example
+secrets/
+Secrets/
+Assets/Secrets/
+Assets/Config/Secrets/
+Assets/**/Secrets/
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+*.mobileprovision
+```
+
+Antes de hacer commit, revisar que no aparezcan claves con patrones como:
+
+```text
+AIza
+API_KEY
+apiKey
+token
+secret
+client_secret
+```
+
+---
+
+## 9. Configuración en Unity
+
+### 9.1 Activar XR Plug-in Management
+
+En Unity:
+
+```text
+Edit → Project Settings → XR Plug-in Management
+```
+
+En Android:
+
+```text
+Activar ARCore
+```
+
+Para una futura versión iOS:
+
+```text
+Activar ARKit
+```
+
+---
+
+### 9.2 Configurar ARCore Extensions
+
+En la escena principal debe existir una configuración asociada a ARCore Extensions.
+
+Verificar la presencia de:
+
+```text
+AR Session
+XR Origin / AR Origin
+ARCore Extensions
+ARCore Extensions Config
+```
+
+En la configuración de ARCore Extensions, habilitar las opciones geoespaciales según la documentación oficial.
+
+---
+
+### 9.3 Activar Geospatial Creator
+
+Geospatial Creator permite configurar y previsualizar ubicaciones reales dentro del flujo de ARCore Geospatial.
+
+Documentación oficial:
+
+[Google Geospatial Creator for Unity - Quickstart](https://developers.google.com/ar/geospatialcreator/unity/quickstart)
+
+Desde Geospatial Creator se pueden configurar ubicaciones reales, previsualizar el entorno y posicionar objetos en coordenadas específicas.
+
+---
+
+## 10. Configuración de anclajes geoespaciales
+
+Los contenidos se posicionan mediante coordenadas reales.
+
+Cada punto debe tener:
+
+```text
+Latitud
+Longitud
+Altitud
+Orientación
+Objeto asociado
+```
+
+Ejemplo conceptual:
+
+```text
+Anchor 1
+Latitud: [COMPLETAR]
+Longitud: [COMPLETAR]
+Altitud: [COMPLETAR]
+Contenido: esfera roja / video / modelo 3D
+
+Anchor 2
+Latitud: [COMPLETAR]
+Longitud: [COMPLETAR]
+Altitud: [COMPLETAR]
+Contenido: esfera azul / video / modelo 3D
+```
+
+---
+
+## 11. Cómo agregar un nuevo punto geoespacial
+
+1. Abrir la escena principal:
+
+    ```text
+    Assets/Scenes/MainGeospatialAR.unity
+    ```
+
+2. Abrir la herramienta de Geospatial Creator.
+
+3. Crear un nuevo objeto geoespacial o anchor.
+
+4. Ingresar:
+
+    ```text
+    Latitude
+    Longitude
+    Altitude
+    ```
+
+5. Asociar un prefab o GameObject como contenido.
+
+6. Ajustar:
+
+    ```text
+    Position local
+    Rotation
+    Scale
+    ```
+
+7. Guardar la escena.
+
+8. Probar en un dispositivo Android compatible con ARCore.
+
+---
+
+## 12. Contenido 3D georreferenciado
+
+El contenido 3D puede estar compuesto por:
+
+```text
+esferas de referencia
+modelos 3D
+flechas de orientación
+paneles informativos
+objetos asociados a fenómenos costeros
+```
+
+Recomendaciones:
+
+- Mantener una escala moderada.
+- Evitar modelos excesivamente pesados.
+- Usar materiales visibles en exteriores.
+- Verificar orientación.
+- Probar el objeto desde distintas distancias.
+- Revisar la altura del contenido respecto del usuario.
+
+---
+
+## 13. Contenido audiovisual georreferenciado
+
+El prototipo permite reproducir video asociado a un punto geográfico.
+
+### 13.1 Implementación
 
 El sistema usa:
 
-### Quad (pantalla)
+#### Quad o plano virtual
 
-* Objeto: `VideoScreen`
-* Tipo: Quad
-* Función: superficie donde se muestra el video
+Objeto sugerido:
 
-### Render Texture
+```text
+VideoScreen
+```
 
-* Archivo: `VideoRenderTexture`
-* Recibe la salida del Video Player
+Función:
 
-### Material
+```text
+Superficie donde se muestra el video
+```
 
-* Shader: Unlit/Texture
-* Textura: `VideoRenderTexture`
+#### Render Texture
 
-### Video Player
+Archivo sugerido:
 
-Configuración:
+```text
+VideoRenderTexture
+```
 
-* Source: Video Clip
-* Render Mode: Render Texture
-* Target Texture: VideoRenderTexture
-* Play On Awake: activado
-* Loop: opcional
+Función:
 
----
+```text
+Recibe la salida del Video Player
+```
 
-## 6.2 Formato del video
-
-Formatos soportados:
-
-* .mp4
-* .mov
-
-Recomendado:
-
-* Codec: H.264
-* Resolución: 720p o 1080p
-* Duración corta
-
-Ejemplo:
-
-1920 × 1080 (16:9)
-
----
-
-## 6.3 Escala correcta del video
-
-Para evitar deformación:
-
-Y = X × (9 / 16)
-
-Ejemplos:
-
-* X = 2 → Y = 1.125
-* X = 1 → Y = 0.5625
-* X = 0.16 → Y = 0.09
+#### Material
 
 Configuración recomendada:
 
-* Scale X = 0.16
-* Scale Y = 0.09
-* Scale Z = 1
+```text
+Shader: Unlit/Texture
+Texture: VideoRenderTexture
+```
+
+#### Video Player
+
+Configuración recomendada:
+
+```text
+Source: Video Clip
+Render Mode: Render Texture
+Target Texture: VideoRenderTexture
+Play On Awake: activado
+Loop: opcional
+```
 
 ---
 
-## 6.4 Cómo cambiar el video
+### 13.2 Formato recomendado del video
 
-1. Importar el archivo a Assets
+Formatos:
 
-2. Seleccionar el objeto con Video Player
+```text
+.mp4
+.mov
+```
 
-3. Cambiar el campo:
-   Video Clip
+Recomendado:
 
-4. Verificar:
-
-   * Render Mode = Render Texture
-   * Target Texture correcto
-
----
-
-## 6.5 Problemas comunes
-
-Pantalla negra:
-
-* Render Texture no asignado
-* Material incorrecto
-
-Video deformado:
-
-* Escala incorrecta
-
-Video oscuro:
-
-* Shader no es Unlit
-
-Video no aparece:
-
-* Quad mal orientado
-* Objeto fuera de cámara
+```text
+Codec: H.264
+Resolución: 720p o 1080p
+Duración corta
+Relación de aspecto: 16:9
+```
 
 ---
 
-## 6.6 Audio (opcional)
+### 13.3 Escala correcta del video
 
-El Video Player puede reproducir audio.
+Para evitar deformación:
 
-Para prototipos:
+```text
+Y = X × (9 / 16)
+```
 
-* se puede ignorar inicialmente
+Ejemplos:
 
----
+```text
+X = 2     → Y = 1.125
+X = 1     → Y = 0.5625
+X = 0.16  → Y = 0.09
+```
 
-## 6.7 Audio espacial (avanzado)
+Configuración base recomendada:
 
-Para mayor inmersión:
+```text
+Scale X = 0.16
+Scale Y = 0.09
+Scale Z = 1
+```
 
-1. Agregar componente Audio Source
-
-2. Configurar:
-
-   * Spatial Blend = 3D
-
-3. Posicionar el objeto cerca del marcador
-
-Esto permite que el sonido dependa de la posición del usuario.
-
----
-
-# 7. Ejecutar en iOS (Paso a paso)
-
-## En Unity
-
-1. Edit → Project Settings → XR Plug-in Management
-
-2. En iOS:
-
-   * Activar ARKit
-
-3. File → Build Settings
-
-4. Seleccionar iOS
-
-5. Click en "Switch Platform"
-
-6. Click en "Build"
-
-7. Elegir carpeta
+La escala debe ajustarse según la distancia esperada de observación.
 
 ---
 
-## En Xcode
+### 13.4 Problemas comunes con video
 
-1. Abrir el proyecto generado
+#### Pantalla negra
 
-2. Seleccionar:
-   Unity-iPhone
+Posibles causas:
 
-3. Signing & Capabilities
+```text
+Render Texture no asignado
+Material incorrecto
+Video Player sin Target Texture
+Formato de video no compatible
+```
 
-4. Activar:
-   Automatically manage signing
+#### Video deformado
 
-5. Seleccionar cuenta
+Posibles causas:
 
-6. Conectar iPhone
+```text
+Escala incorrecta
+Relación de aspecto no coincidente
+```
 
-7. Presionar Run
+#### Video oscuro
 
----
+Posible causa:
 
-## En el iPhone
+```text
+Shader con iluminación en lugar de Unlit
+```
 
-1. Aceptar permisos de cámara
+#### Video no aparece
 
-2. Apuntar a la imagen
+Posibles causas:
 
-3. Aparece:
-
-   * objeto 3D
-   * video
-
----
-
-# 8. Ejecutar en Android
-
-## Preparación
-
-* Activar Developer Mode
-* Activar USB Debugging
-
----
-
-## En Unity
-
-1. File → Build Settings
-
-2. Seleccionar Android
-
-3. Switch Platform
-
-4. Edit → Project Settings → XR Plug-in Management
-
-5. Activar ARCore
-
-6. Build And Run
+```text
+Quad mal orientado
+Objeto fuera del campo visual
+Objeto demasiado pequeño
+Altitud incorrecta
+Anchor detectado pero contenido local desplazado
+```
 
 ---
 
-# 9. Requisitos de las imágenes
+## 14. Ejecutar en Android
 
-✔ Alto contraste
-✔ Detalles visibles
-✔ Texturas
+### 14.1 Preparar teléfono
 
-Evitar:
+En el dispositivo Android:
 
-✘ Imágenes simples
-✘ Patrones repetitivos
-✘ Superficies brillantes
+```text
+Settings → About phone → Build number
+```
 
----
+Presionar varias veces para activar Developer Mode.
 
-# 10. Debug
+Luego activar:
 
-Para verificar detección:
+```text
+Developer options → USB debugging
+```
 
-* Revisar consola en Xcode
-* Buscar:
-  [ADDED], [UPDATED]
-
-Si no aparecen:
-→ la imagen no está siendo detectada
+Verificar que el dispositivo sea compatible con ARCore.
 
 ---
 
-# 11. Extensiones posibles
+### 14.2 Configurar Unity
 
-* múltiples imágenes
-* distintos modelos
-* múltiples videos
-* interacción
-* animaciones
-* UI
-* persistencia
+En Unity:
+
+```text
+File → Build Settings
+```
+
+Seleccionar:
+
+```text
+Android
+```
+
+Luego:
+
+```text
+Switch Platform
+```
+
+Ir a:
+
+```text
+Edit → Project Settings → XR Plug-in Management
+```
+
+Activar:
+
+```text
+ARCore
+```
 
 ---
 
-# 12. Notas importantes
+### 14.3 Player Settings
 
-* NO subir:
+En:
 
-  * Library
-  * Temp
-  * Builds
+```text
+Edit → Project Settings → Player
+```
 
-* Usar misma versión de Unity
+Revisar:
 
-* Instalar packages desde Unity Registry
+```text
+Company Name: [COMPLETAR]
+Product Name: [COMPLETAR]
+Package Name: com.[COMPLETAR].[COMPLETAR]
+Minimum API Level: [COMPLETAR según compatibilidad]
+Target API Level: Automatic o recomendado por Unity
+```
+
+Verificar permisos:
+
+```text
+Camera
+Location
+Internet
+```
+
+---
+
+### 14.4 Build and Run
+
+Conectar el teléfono por USB.
+
+En Unity:
+
+```text
+File → Build Settings → Build And Run
+```
+
+Al abrir la app en el teléfono, aceptar permisos de:
+
+```text
+Cámara
+Ubicación
+```
+
+---
+
+## 15. Pruebas en terreno
+
+Durante las pruebas, registrar:
+
+```text
+Fecha
+Hora
+Lugar
+Dispositivo
+Condiciones de luz
+Conectividad
+Precisión reportada
+Distancia al anchor
+Dirección indicada
+Altura reportada
+Visibilidad del contenido
+Estabilidad del objeto
+Problemas observados
+```
+
+Ejemplo:
+
+```text
+Prueba 1
+Lugar: Campus San Joaquín
+Anchor: Punto 1
+Distancia inicial: [COMPLETAR]
+Precisión horizontal: [COMPLETAR]
+Objeto visible: sí / no
+Observación: [COMPLETAR]
+```
+
+---
+
+## 16. Debug
+
+El prototipo puede incluir una interfaz temporal de debug para mostrar:
+
+```text
+Latitud actual
+Longitud actual
+Altitud actual
+Precisión horizontal
+Orientación
+Distancia al anchor
+Dirección hacia el anchor
+Diferencia de altura
+Estado de localización
+```
+
+Esta información es útil durante el desarrollo, pero no debería mostrarse en la versión final destinada a usuarios.
+
+---
+
+## 17. Problemas comunes del prototipo geoespacial
+
+### 17.1 El contenido aparece lejos
+
+Revisar:
+
+```text
+Latitud
+Longitud
+Altitud
+Escala
+Offset local del objeto
+Jerarquía dentro del anchor
+```
+
+---
+
+### 17.2 El anchor se detecta, pero el objeto no aparece
+
+Revisar:
+
+```text
+Objeto hijo desactivado
+Escala demasiado pequeña
+Material transparente
+Objeto fuera de cámara
+Rotación incorrecta
+Altitud incorrecta
+```
+
+---
+
+### 17.3 La distancia se actualiza, pero no se ve el contenido
+
+Esto puede indicar que la localización funciona, pero el contenido está mal configurado dentro de Unity.
+
+Revisar:
+
+```text
+Transform local
+Rotation
+Scale
+Prefab asociado
+Canvas o Quad orientado en sentido contrario
+```
+
+---
+
+### 17.4 La app no localiza bien
+
+Revisar:
+
+```text
+Permisos de ubicación
+GPS activo
+Conexión a internet
+VPS disponible en la zona
+Cielo visible
+Precisión horizontal reportada
+Movimiento inicial del dispositivo
+```
+
+---
+
+### 17.5 El video aparece negro
+
+Revisar:
+
+```text
+Render Texture
+Material Unlit
+Video Player
+Target Texture
+Formato del archivo
+Compatibilidad del codec
+```
+
+---
+
+## 18. Proyección a iOS
+
+El prototipo fue trabajado principalmente para pruebas geoespaciales en Android mediante ARCore.
+
+Para una futura versión iOS se debe revisar:
+
+```text
+Compatibilidad de ARCore Geospatial en iOS
+Configuración con ARKit
+Bundle ID
+Restricción de API Key para iOS
+Xcode
+Signing & Capabilities
+Permisos de cámara y ubicación
+```
+
+Pasos generales:
+
+```text
+File → Build Settings → iOS → Switch Platform
+Edit → Project Settings → XR Plug-in Management → activar ARKit
+Build
+Abrir proyecto en Xcode
+Configurar firma
+Ejecutar en iPhone/iPad
+```
+
+---
+
+## 19. Buenas prácticas antes de subir al repositorio
+
+No subir:
+
+```text
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+API Keys
+Tokens
+Keystores
+Certificados
+```
+
+Antes de hacer commit, revisar en GitHub Desktop que no aparezcan archivos con:
+
+```text
+AIza
+API_KEY
+apiKey
+token
+secret
+client_secret
+```
+
+Si aparece una clave real, eliminarla antes del commit.
+
+---
+
+## 20. Extensiones posibles
+
+Este prototipo puede ampliarse con:
+
+```text
+más anclajes geoespaciales
+modelos 3D costeros
+videos científicos
+audio espacial
+interfaz de usuario final
+indicadores de dirección
+narrativa por estaciones
+recorrido guiado
+validación en miradores costeros
+pruebas en iOS
+evaluación con usuarios
+```
+
+---
+
+## 21. Notas importantes
+
+- Este proyecto corresponde a un prototipo geoespacial con Google Geospatial Creator.
+- Las coordenadas deben revisarse cuidadosamente.
+- La altitud afecta la visibilidad del contenido.
+- La localización puede variar según el dispositivo, conectividad, entorno y disponibilidad de VPS.
+- Las API Keys no deben subirse al repositorio.
+- La interfaz de debug es solo para desarrollo.
+- La versión final debería reemplazar los mensajes técnicos por instrucciones comprensibles para usuarios no expertos.
+
+Documentación hecha con IA en base a comentarios y estructura del proyecto
