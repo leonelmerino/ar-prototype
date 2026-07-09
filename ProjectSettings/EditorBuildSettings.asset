@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/prototipovps.unity
     guid: e2c54477619c5e242bd763cf540399a2
+  - enabled: 0
+    path: Assets/Scenes/pruebba.unity
+    guid: 34c851e1cf06546848b47648d6f5f5c1
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 677089b151beb4762bb653583d6b0489, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 1f9be883869f34bb28a092f4a3998579, type: 2}

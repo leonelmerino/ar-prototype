@@ -921,7 +921,7 @@ GameObject:
   - component: {fileID: 969608109}
   - component: {fileID: 969608108}
   m_Layer: 0
-  m_Name: AR Geospatial Creator Anchor 3.2 (1)
+  m_Name: AR Geospatial Creator Anchor 2.2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -940,9 +940,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Google.XR.ARCoreExtensions.GeospatialCreator::Google.XR.ARCoreExtensions.GeospatialCreator.ARGeospatialCreatorAnchor
   _altitudeOffset: NaN
-  _latitude: -33.498651545503854
-  _longitude: -70.61519765905894
-  _altitude: 584.9999467069283
+  _latitude: 37.421832353453226
+  _longitude: -122.08272778427043
+  _altitude: 576.1277035921812
   _altitudeType: 0
   _useEditorAltitudeOverride: 0
   _editorAltitudeOverride: 589.1117481412366
@@ -957,7 +957,7 @@ Transform:
   m_GameObject: {fileID: 969608107}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.38, y: 573.4999, z: -16.81}
+  m_LocalPosition: {x: 11.704467, y: 564.6276, z: -29.485596}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -975,7 +975,7 @@ GameObject:
   - component: {fileID: 1039958212}
   - component: {fileID: 1039958211}
   m_Layer: 0
-  m_Name: AR Geospatial Creator Anchor 3.2
+  m_Name: AR Geospatial Creator Anchor 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -994,9 +994,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Google.XR.ARCoreExtensions.GeospatialCreator::Google.XR.ARCoreExtensions.GeospatialCreator.ARGeospatialCreatorAnchor
   _altitudeOffset: NaN
-  _latitude: -33.49867011672606
-  _longitude: -70.6151399827128
-  _altitude: 584.9999752044678
+  _latitude: 37.42188772144525
+  _longitude: -122.0827830729903
+  _altitude: 577.1276709735394
   _altitudeType: 0
   _useEditorAltitudeOverride: 0
   _editorAltitudeOverride: 589.1117481412366
@@ -1011,7 +1011,7 @@ Transform:
   m_GameObject: {fileID: 1039958210}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.74, y: 573.4999, z: -18.87}
+  m_LocalPosition: {x: 6.81, y: 565.6276, z: -23.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1065,7 +1065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CesiumForUnity::CesiumForUnity.Cesium3DTileset
   _showCreditsOnScreen: 1
   _tilesetSource: 1
-  _url: https://tile.googleapis.com/v1/3dtiles/root.json?key=REEMPLAZAR_LOCALMENT
+  _url: https://tile.googleapis.com/v1/3dtiles/root.json?key=CAMBIAR_LOCALMENTE
   _ionAssetID: 0
   _ionAccessToken: 
   _ionServer: {fileID: 11400000, guid: 8e8aa34dbeda894438127535e7169410, type: 2}
@@ -1141,13 +1141,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: CesiumForUnity::CesiumForUnity.CesiumGeoreference
   _ellipsoidOverride: {fileID: 0}
   _originPlacement: 1
-  _originAuthority: 0
-  _latitude: -33.4985
-  _longitude: -70.61546
-  _height: 11.5
-  _ecefX: 1767127.5551613546
-  _ecefY: -5022355.716106282
-  _ecefZ: -3500201.9002092145
+  _originAuthority: 1
+  _latitude: -33.498385726544804
+  _longitude: -70.61532360495818
+  _height: 20.372213858902764
+  _ecefX: 1767144.2885096546
+  _ecefY: -5022365.08718357
+  _ecefZ: -3500196.227647961
   _scale: 1
 --- !u!114 &1192009914
 MonoBehaviour:
@@ -1441,7 +1441,7 @@ GameObject:
   - component: {fileID: 1723752878}
   - component: {fileID: 1723752877}
   m_Layer: 0
-  m_Name: AR Geospatial Creator Anchor 2.2
+  m_Name: AR Geospatial Creator Anchor 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1460,9 +1460,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Google.XR.ARCoreExtensions.GeospatialCreator::Google.XR.ARCoreExtensions.GeospatialCreator.ARGeospatialCreatorAnchor
   _altitudeOffset: NaN
-  _latitude: -33.49972500359881
-  _longitude: -70.61165719431935
-  _altitude: 585.0000019790605
+  _latitude: 37.42075947515657
+  _longitude: -122.07901117077158
+  _altitude: 576.1277674175799
   _altitudeType: 0
   _useEditorAltitudeOverride: 0
   _editorAltitudeOverride: 589.1436177035794
@@ -1477,7 +1477,7 @@ Transform:
   m_GameObject: {fileID: 1723752876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 353.39987, y: 573.4888, z: -135.88826}
+  m_LocalPosition: {x: 340.7245, y: 564.61694, z: -148.56343}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1604,14 +1604,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GeospatialGuideHUD
   earthManager: {fileID: 1383102709}
-  anchor1Name: Green Sphere (Anchor 2)
-  anchor1Latitude: -33.499725003604546
-  anchor1Longitude: -70.61165719426315
-  anchor1Altitude: 590
-  anchor2Name: 'Green Sphere (Anchor 3) '
-  anchor2Latitude: -33.49864756582355
-  anchor2Longitude: -70.6151044963487
-  anchor2Altitude: 590
+  anchor1Name: Green Sphere (Anchor 1)
+  anchor1Latitude: -33.49972500359881
+  anchor1Longitude: -70.61165719431935
+  anchor1Altitude: 585
+  anchor2Name: 'Green Sphere (Anchor 2) '
+  anchor2Latitude: -33.49859614164327
+  anchor2Longitude: -70.6152503260231
+  anchor2Altitude: 585
 --- !u!1 &1978348401
 GameObject:
   m_ObjectHideFlags: 0

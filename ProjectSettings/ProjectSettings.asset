@@ -170,7 +170,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.avanzauc.argeospatial
     Standalone: com.DefaultCompany.ar-prototype
-    iPhone: cl.uc.leonelmerino.ar-prototype
+    iPhone: cl.uc.avanza.prototype-vps
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -588,7 +588,8 @@ PlayerSettings:
   enableCrashReportAPI: 0
   cameraUsageDescription: "Esta aplicaci\xF3n usa la c\xE1mara para detectar una
     imagen y mostrar contenido de realidad aumentada."
-  locationUsageDescription: 
+  locationUsageDescription: La ubicacion se utiliza para proporcionar contenido geoespacial
+    en el entorno
   microphoneUsageDescription: 
   bluetoothUsageDescription: 
   macOSTargetOSVersion: 12.0
@@ -849,7 +850,7 @@ PlayerSettings:
     Android: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS;ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED
     Standalone: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
     Windows Store Apps: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
-    iPhone: UNITY_XR_ARKIT_LOADER_ENABLED;ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED
+    iPhone: UNITY_XR_ARKIT_LOADER_ENABLED;ARCORE_EXTENSIONS_IOS_SUPPORT;GEOSPATIAL_IOS_SUPPORT;ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
